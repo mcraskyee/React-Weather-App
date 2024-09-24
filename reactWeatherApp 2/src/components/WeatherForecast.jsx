@@ -1,52 +1,40 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import "../css/WeatherForecast.css";
+import fetchWeather from "../services/weatherApis";
 import moment from "moment";
 
-function WeatherForecast({ data }) {
+function WeatherForecast({ data, currentCity, setData }) {
+  const days = 5;
+  useEffect(() => {
+    fetchWeather(currentCity, days, setData);
+  }, [currentCity, setData]);
+
+  const forecastDays = data && data.forecast ? data.forecast.forecastday : [];
+
   return (
     <div className="forecast">
-      {data ? (
+      {Array.isArray(forecastDays) && forecastDays.length > 0 ? (
         <Fragment>
-          <div className="forecast-item" key={data.current.is_day}>
-            <h3 className="forecast-item-week">{moment().format("dddd")}</h3>
-            <p className="forecast-item-date">{moment().format("DD MMMM")}</p>
-            <img
-              className="forecast-item-icon"
-              src={data.current.condition.icon}
-              alt="icon"
-            />
-            <p className="forecast-item-temp">{`${data.current.windchill_c}~${data.current.feelslike_c}°`}</p>
-          </div>
-          <div className="forecast-item" key={data.current.is_day}>
-            <h3 className="forecast-item-week">{moment().format("dddd")}</h3>
-            <p className="forecast-item-date">{moment().format("DD MMMM")}</p>
-            <img
-              className="forecast-item-icon"
-              src={data.current.condition.icon}
-              alt="icon"
-            />
-            <p className="forecast-item-temp">{`${data.current.windchill_c}~${data.current.feelslike_c}°`}</p>
-          </div>
-          <div className="forecast-item" key={data.current.is_day}>
-            <h3 className="forecast-item-week">{moment().format("dddd")}</h3>
-            <p className="forecast-item-date">{moment().format("DD MMMM")}</p>
-            <img
-              className="forecast-item-icon"
-              src={data.current.condition.icon}
-              alt="icon"
-            />
-            <p className="forecast-item-temp">{`${data.current.windchill_c}~${data.current.feelslike_c}°`}</p>
-          </div>
-          <div className="forecast-item" key={data.current.is_day}>
-            <h3 className="forecast-item-week">{moment().format("dddd")}</h3>
-            <p className="forecast-item-date">{moment().format("DD MMMM")}</p>
-            <img
-              className="forecast-item-icon"
-              src={data.current.condition.icon}
-              alt="icon"
-            />
-            <p className="forecast-item-temp">{`${data.current.windchill_c}~${data.current.feelslike_c}°`}</p>
-          </div>
+          {forecastDays.map((dayData) => (
+            <div className="forecast-item" key={dayData.date}>
+              <h3 className="forecast-item-week">
+                {moment(dayData.date).format("dddd")}
+              </h3>
+              <p className="forecast-item-date">
+                {moment(dayData.date).format("DD MMMM")}
+              </p>
+              {dayData.day && dayData.day.condition && (
+                <Fragment>
+                  <img
+                    className="forecast-item-icon"
+                    src={dayData.day.condition.icon}
+                    alt="icon"
+                  />
+                  <p className="forecast-item-temp">{`${dayData.day.mintemp_c}~${dayData.day.maxtemp_c}°`}</p>
+                </Fragment>
+              )}
+            </div>
+          ))}
         </Fragment>
       ) : (
         <p>Loading...</p>

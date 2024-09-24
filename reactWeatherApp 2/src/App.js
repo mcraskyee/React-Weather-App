@@ -11,6 +11,8 @@ function App() {
   const [data, setData] = useState("");
   const [currentCity, setCurrentCity] = useState("Brisbane");
 
+  console.log("data", data, typeof data);
+
   return (
     <main className="App">
       <section className="app-left">
@@ -29,7 +31,11 @@ function App() {
         </div>
       </section>
       <section className="app-right">
-        <WeatherForecast data={data} currentCity={currentCity} />
+        <WeatherForecast
+          data={data}
+          setData={setData}
+          currentCity={currentCity}
+        />
         <SearchBar setData={setData} setCurrentCity={setCurrentCity} />
         <CityCards />
       </section>

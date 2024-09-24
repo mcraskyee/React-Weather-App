@@ -3,8 +3,9 @@ import fetchWeather from "../services/weatherApis";
 import "../css/WeatherInfo.css";
 
 function WeatherInfo({ data, currentCity, setData }) {
+  const days = 1;
   useEffect(() => {
-    fetchWeather(currentCity, 1, setData);
+    fetchWeather(currentCity, days, setData);
   }, [currentCity, setData]);
 
   return (
