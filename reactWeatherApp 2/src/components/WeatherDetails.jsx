@@ -1,7 +1,12 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
+import fetchWeather from "../services/weatherApis";
 import "../css/WeatherDetails.css";
 
-function WeatherDetails({ data }) {
+function WeatherDetails({ data, currentCity, setData }) {
+  useEffect(() => {
+    fetchWeather(currentCity, 1, setData);
+  }, [currentCity, setData]);
+
   return (
     <div className="details">
       {data ? (

@@ -1,4 +1,4 @@
-async function fetchWeather(searchCity, days, setData, setDays) {
+async function fetchWeather(searchCity, days, setData) {
   const API_KEY = "f98472fece5e409d92293927242209";
   const API_URL = `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${searchCity}&days=${days}&aqi=yes&alerts=yes`;
 
@@ -12,10 +12,8 @@ async function fetchWeather(searchCity, days, setData, setDays) {
     console.log("result", result);
     if (result.location.name.toLowerCase() !== searchCity.toLowerCase()) {
       setData("");
-      setDays(1);
     } else {
       setData(result);
-      setDays(days);
     }
   } catch (error) {
     console.error("error fetching data", error);

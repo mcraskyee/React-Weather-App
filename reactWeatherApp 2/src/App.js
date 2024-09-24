@@ -1,6 +1,5 @@
 import "./App.css";
-import { React, useState, useEffect } from "react";
-import fetchWeather from "./services/weatherApis.js";
+import { React, useState } from "react";
 import SearchBar from "./components/SearchBar.jsx";
 import WeatherForecast from "./components/WeatherForecast.jsx";
 import CityCards from "./components/CityCards.jsx";
@@ -11,28 +10,27 @@ import DisplayTime from "./components/DisplayTime.jsx";
 function App() {
   const [data, setData] = useState("");
   const [currentCity, setCurrentCity] = useState("Brisbane");
-  const [days, setDays] = useState(1);
-
-  useEffect(() => {
-    fetchWeather(currentCity, days, setData, setDays);
-  }, [currentCity, days]);
 
   return (
     <main className="App">
       <section className="app-left">
         <DisplayTime className="app-left-display" />
         <div className="app-left-main">
-          <WeatherDetails data={data} days={days} currentCity={currentCity} />
-          <WeatherInfo data={data} days={days} currentCity={currentCity} />
+          <WeatherDetails
+            data={data}
+            setData={setData}
+            currentCity={currentCity}
+          />
+          <WeatherInfo
+            data={data}
+            setData={setData}
+            currentCity={currentCity}
+          />
         </div>
       </section>
       <section className="app-right">
-        <WeatherForecast data={data} days={days} currentCity={currentCity} />
-        <SearchBar
-          setData={setData}
-          setDays={setDays}
-          setCurrentCity={setCurrentCity}
-        />
+        <WeatherForecast data={data} currentCity={currentCity} />
+        <SearchBar setData={setData} setCurrentCity={setCurrentCity} />
         <CityCards />
       </section>
     </main>
