@@ -1,0 +1,16 @@
+.forecast {
+  display: flex;
+}
+
+.forecast-item {
+  margin: 1.5vw;
+}
+
+.forecast-item-date {
+  font-size: 10px;
+}
+
+.forecast-item-icon {
+  margin: 1vw 0;
+  font-size: 120px;
+}
