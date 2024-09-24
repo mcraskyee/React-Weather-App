@@ -9,8 +9,11 @@ function WeatherForecast({ data, currentCity, setData }) {
     fetchWeather(currentCity, days, setData);
   }, [currentCity, setData]);
 
-  const forecastDays = data && data.forecast ? data.forecast.forecastday : [];
+  //convert data from object to array, and slice the today's weather
+  const forecastDays =
+    data && data.forecast ? data.forecast.forecastday.slice(1) : [];
 
+  //map before confirming forecastDays is an effect array
   return (
     <div className="forecast">
       {Array.isArray(forecastDays) && forecastDays.length > 0 ? (

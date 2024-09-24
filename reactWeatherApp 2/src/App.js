@@ -11,8 +11,6 @@ function App() {
   const [data, setData] = useState("");
   const [currentCity, setCurrentCity] = useState("Brisbane");
 
-  console.log("data", data, typeof data);
-
   return (
     <main className="App">
       <section className="app-left">
