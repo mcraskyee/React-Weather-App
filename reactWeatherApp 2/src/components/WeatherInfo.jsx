@@ -1,38 +1,32 @@
-import React, { Fragment, useEffect } from "react";
-import fetchWeather from "../services/weatherApis";
+import React, { Fragment } from "react";
 import "../css/WeatherInfo.css";
 
-function WeatherInfo({ data, currentCity, setData }) {
-  const days = 1;
-  useEffect(() => {
-    fetchWeather(currentCity, days, setData);
-  }, [currentCity, setData]);
-
+function WeatherInfo(props) {
   return (
     <div className="infos">
-      {data ? (
+      {props.currentCityWeather ? (
         <Fragment>
           <div className="infos-group">
             <span className="infos-icon material-symbols-outlined">air</span>
-            <p>{data.current.wind_mph}km/h</p>
+            <p>{props.currentCityWeather.current.wind_mph}km/h</p>
           </div>
           <div className="infos-group">
             <span className="infos-icon material-symbols-outlined">
               device_thermostat
             </span>
-            <p>{data.current.temp_c}°</p>
+            <p>{props.currentCityWeather.current.temp_c}°</p>
           </div>
           <div className="infos-group">
             <span className="infos-icon material-symbols-outlined">
               humidity_percentage
             </span>
-            <p>{data.current.humidity}%</p>
+            <p>{props.currentCityWeather.current.humidity}%</p>
           </div>
           <div className="infos-group">
             <span className="infos-icon material-symbols-outlined">
               lens_blur
             </span>
-            <p>{data.current.air_quality.pm2_5}µg</p>
+            <p>{props.currentCityWeather.current.air_quality.pm2_5}µg</p>
           </div>
         </Fragment>
       ) : (

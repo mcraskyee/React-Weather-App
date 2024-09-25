@@ -1,39 +1,36 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import "../css/WeatherForecast.css";
-import fetchWeather from "../services/weatherApis";
 import moment from "moment";
 
-function WeatherForecast({ data, currentCity, setData }) {
-  const days = 5;
-  useEffect(() => {
-    fetchWeather(currentCity, days, setData);
-  }, [currentCity, setData]);
-
+function WeatherForecast(props) {
   //convert data from object to array, and slice the today's weather
   const forecastDays =
-    data && data.forecast ? data.forecast.forecastday.slice(1) : [];
+    props.currentCityFuture && props.currentCityFuture.forecast
+      ? props.currentCityFuture.forecast.forecastday.slice(1)
+      : [];
+  console.log("forecastDays", forecastDays);
 
   //map before confirming forecastDays is an effect array
   return (
     <div className="forecast">
       {Array.isArray(forecastDays) && forecastDays.length > 0 ? (
         <Fragment>
-          {forecastDays.map((dayData) => (
-            <div className="forecast-item" key={dayData.date}>
+          {forecastDays.map((futureDay) => (
+            <div className="forecast-item" key={futureDay.date}>
               <h3 className="forecast-item-week">
-                {moment(dayData.date).format("dddd")}
+                {moment(futureDay.date).format("dddd")}
               </h3>
               <p className="forecast-item-date">
-                {moment(dayData.date).format("DD MMMM")}
+                {moment(futureDay.date).format("DD MMMM")}
               </p>
-              {dayData.day && dayData.day.condition && (
+              {futureDay.day && futureDay.day.condition && (
                 <Fragment>
                   <img
                     className="forecast-item-icon"
-                    src={dayData.day.condition.icon}
+                    src={futureDay.day.condition.icon}
                     alt="icon"
                   />
-                  <p className="forecast-item-temp">{`${dayData.day.mintemp_c}~${dayData.day.maxtemp_c}°`}</p>
+                  <p className="forecast-item-temp">{`${futureDay.day.mintemp_c}~${futureDay.day.maxtemp_c}°`}</p>
                 </Fragment>
               )}
             </div>

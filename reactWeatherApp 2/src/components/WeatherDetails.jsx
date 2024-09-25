@@ -1,25 +1,21 @@
-import React, { Fragment, useEffect } from "react";
-import fetchWeather from "../services/weatherApis";
+import React, { Fragment } from "react";
 import "../css/WeatherDetails.css";
 
-function WeatherDetails({ data, currentCity, setData }) {
-  const days = 1;
-  useEffect(() => {
-    fetchWeather(currentCity, days, setData);
-  }, [currentCity, setData]);
-
+function WeatherDetails(props) {
   return (
     <div className="details">
-      {data ? (
+      {props.currentCityWeather ? (
         <Fragment>
-          <p className="details-state-country">{`${data.location.region}, ${data.location.country}`}</p>
-          <h3 className="details-city">{data.location.name}</h3>
-          <h1 className="details-temp">{data.current.temp_c}°</h1>
-          <p className="details-range">{`${data.current.windchill_c}~${data.current.feelslike_c}°`}</p>
+          <p className="details-state-country">{`${props.currentCityWeather.location.region}, ${props.currentCityWeather.location.country}`}</p>
+          <h3 className="details-city">
+            {props.currentCityWeather.location.name}
+          </h3>
+          <h1 className="details-temp">{props.currentCityWeather.temp_c}°</h1>
+          <p className="details-range">{`${props.currentCityWeather.current.windchill_c}~${props.currentCityWeather.current.feelslike_c}°`}</p>
           <div>
             <img
               className="details-icon"
-              src={data.current.condition.icon}
+              src={props.currentCityWeather.current.condition.icon}
               alt="icon"
             />
           </div>
