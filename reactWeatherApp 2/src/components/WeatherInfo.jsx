@@ -1,32 +1,32 @@
 import React, { Fragment } from "react";
 import "../css/WeatherInfo.css";
 
-function WeatherInfo(props) {
+function WeatherInfo({ currentCityWeather }) {
   return (
     <div className="infos">
-      {props.currentCityWeather ? (
+      {currentCityWeather ? (
         <Fragment>
           <div className="infos-group">
             <span className="infos-icon material-symbols-outlined">air</span>
-            <p>{props.currentCityWeather.current.wind_mph}km/h</p>
+            <p>{currentCityWeather.current.wind_mph}km/h</p>
           </div>
           <div className="infos-group">
             <span className="infos-icon material-symbols-outlined">
               device_thermostat
             </span>
-            <p>{props.currentCityWeather.current.temp_c}°</p>
+            <p>{currentCityWeather.current.temp_c}°</p>
           </div>
           <div className="infos-group">
             <span className="infos-icon material-symbols-outlined">
               humidity_percentage
             </span>
-            <p>{props.currentCityWeather.current.humidity}%</p>
+            <p>{currentCityWeather.current.humidity}%</p>
           </div>
           <div className="infos-group">
             <span className="infos-icon material-symbols-outlined">
               lens_blur
             </span>
-            <p>{props.currentCityWeather.current.air_quality.pm2_5}µg</p>
+            <p>{currentCityWeather.current.air_quality.pm2_5}µg</p>
           </div>
         </Fragment>
       ) : (

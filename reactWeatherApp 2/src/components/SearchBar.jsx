@@ -1,10 +1,10 @@
 import { React } from "react";
 import "../css/SearchBar.css";
 
-function SearchBar(props) {
+function SearchBar({ onSearch, searchInput, setSearchInput, isInputValid }) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.onSearch(props.searchInput);
+    onSearch(searchInput);
   };
   return (
     <div className="search">
@@ -12,13 +12,13 @@ function SearchBar(props) {
         className="search-input"
         type="text"
         placeholder="Please input a city"
-        value={props.searchInput}
-        onChange={(e) => props.setSearchInput(e.target.value)}
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
       />
       <button className="search-button" onClick={handleSubmit}>
         Search
       </button>
-      {props.isInputValid === "false" && (
+      {isInputValid === "false" && (
         <p style={{ color: "red" }}>Invalid city name. Please try again.</p>
       )}
     </div>

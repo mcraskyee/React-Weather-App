@@ -2,15 +2,15 @@ import React, { Fragment } from "react";
 import "../css/WeatherForecast.css";
 import moment from "moment";
 
-function WeatherForecast(props) {
+function WeatherForecast({ currentCityFuture }) {
   //convert data from object to array, and slice the today's weather
   const forecastDays =
-    props.currentCityFuture && props.currentCityFuture.forecast
-      ? props.currentCityFuture.forecast.forecastday.slice(1)
+    currentCityFuture && currentCityFuture.forecast
+      ? currentCityFuture.forecast.forecastday.slice(1)
       : [];
   console.log("forecastDays", forecastDays);
 
-  //map before confirming forecastDays is an effect array
+  //map before confirming data (forecastDays) is an effective array
   return (
     <div className="forecast">
       {Array.isArray(forecastDays) && forecastDays.length > 0 ? (
