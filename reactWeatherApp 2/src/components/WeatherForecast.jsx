@@ -8,7 +8,6 @@ function WeatherForecast({ currentCityFuture }) {
     currentCityFuture && currentCityFuture.forecast
       ? currentCityFuture.forecast.forecastday.slice(1)
       : [];
-  console.log("forecastDays", forecastDays);
 
   //map before confirming data (forecastDays) is an effective array
   return (

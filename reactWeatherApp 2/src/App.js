@@ -9,20 +9,40 @@ import WeatherInfo from "./components/WeatherInfo.jsx";
 import DisplayTime from "./components/DisplayTime.jsx";
 
 function App() {
-  const [currentCityWeather, setCurrentCityWeather] = useState(null);
-  const [currentCityFuture, setcurrentCityFuture] = useState(null);
-  // const [citiesWeather, setCitiesWeather] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
-  const [isInputValid, setIsInputValid] = useState(true);
+  //constants
   const currentCity = "Brisbane";
+  const cities = ["Sydney", "Melbourne", "Perth", "Adelaide"];
   const currentDay = 1;
   const forecastDay = 5;
 
+  //states
+  //WeatherDetails, WeatherInfo
+  const [currentCityWeather, setCurrentCityWeather] = useState(null);
+  //WeatherForecast
+  const [currentCityFuture, setCurrentCityFuture] = useState(null);
+  //CityCards
+  const [citiesWeather, setCitiesWeather] = useState([]);
+  //SearchBar
+  const [searchInput, setSearchInput] = useState("");
+  const [isInputValid, setIsInputValid] = useState(true);
+
   useEffect(() => {
-    fetchWeather(currentCity, currentDay, setCurrentCityWeather);
-    fetchWeather(currentCity, forecastDay, setcurrentCityFuture);
-    fetchWeather();
-  }, []);
+    const fetchAllCitiesWeather = async () => {
+      const weatherPromises = cities.map((city) =>
+        fetchWeather(city, currentDay)
+      );
+      try {
+        const weatherData = await Promise.all(weatherPromises);
+        setCitiesWeather(weatherData);
+      } catch (error) {
+        console.error("Error fetching cities weather data", error);
+      }
+    };
+
+    fetchWeather(currentCity, currentDay).then(setCurrentCityWeather);
+    fetchWeather(currentCity, forecastDay).then(setCurrentCityFuture);
+    fetchAllCitiesWeather();
+  }, [currentCity, currentDay, forecastDay]);
 
   const handleSearch = async (city) => {
     try {
@@ -34,15 +54,26 @@ function App() {
       const forecastData = await fetchWeather(
         city,
         forecastDay,
-        setcurrentCityFuture
+        setCurrentCityFuture
       );
+      console.log("setCurrentCityWeather", setCurrentCityWeather);
+      console.log("setCurrentCityFuture", setCurrentCityFuture);
       if (weatherData && forecastData) {
         setCurrentCityWeather(weatherData);
-        setcurrentCityFuture(forecastData);
+        setCurrentCityFuture(forecastData);
         setIsInputValid(true);
       } else {
         setIsInputValid(false);
+        setCitiesWeather(cities);
         console.error("Invalid city name or no data found");
+      }
+      if (!weatherData) {
+        console.error("weatherData has problem");
+        console.log("weatherData", weatherData);
+      }
+      if (!forecastData) {
+        console.error("forecastData has problem");
+        console.log("forecastData", forecastData);
       }
     } catch (error) {
       console.error("error fetching data", error);
@@ -66,7 +97,7 @@ function App() {
           setSearchInput={setSearchInput}
           isInputValid={isInputValid}
         />
-        <CityCards />
+        <CityCards citiesWeather={citiesWeather} />
       </section>
     </main>
   );

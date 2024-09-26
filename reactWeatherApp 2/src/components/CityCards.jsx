@@ -1,44 +1,30 @@
-import React from "react";
+import React, { Fragment } from "react";
 import "../css/CityCards.css";
-const cities = [
-  {
-    id: 1,
-    name: "Sydney",
-    weather: "sunny",
-    temp: "22",
-  },
-  {
-    id: 2,
-    name: "Shanghai",
-    weather: "sunny",
-    temp: "22",
-  },
-  {
-    id: 3,
-    name: "Melbourne",
-    weather: "sunny",
-    temp: "22",
-  },
-  {
-    id: 4,
-    name: "Delhi",
-    weather: "sunny",
-    temp: "22",
-  },
-];
 
-function CityCards() {
+function CityCards({ citiesWeather }) {
   return (
     <div className="city">
-      {cities.map((city) => (
-        <div className="city-item" key={city.id}>
-          <span class="city-item-icon material-symbols-outlined">
-            {city.weather}
-          </span>
-          <h3 className="city-item-name">{city.name}</h3>
-          <p className="city-item-temp">{city.temp}</p>
-        </div>
-      ))}
+      {Array.isArray(citiesWeather) && citiesWeather.length > 0 ? (
+        <Fragment>
+          {citiesWeather.map((city, index) =>
+            city && city.current && city.current.condition ? (
+              <div className="city-item" key={index}>
+                <img
+                  className="city-item-icon"
+                  src={city.current.condition.icon}
+                  alt="icon"
+                />
+                <h3 className="city-item-name">{city.location.name}</h3>
+                <p className="city-item-temp">{city.current.temp_c}</p>
+              </div>
+            ) : (
+              <p key={index}>No data available</p>
+            )
+          )}
+        </Fragment>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 }
