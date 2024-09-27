@@ -1,5 +1,6 @@
 import "./App.css";
 import { React, useState, useEffect } from "react";
+import cities from "./services/citiesData.js";
 import fetchWeather from "./services/weatherApis.js";
 import SearchBar from "./components/SearchBar.jsx";
 import WeatherForecast from "./components/WeatherForecast.jsx";
@@ -11,7 +12,6 @@ import DisplayTime from "./components/DisplayTime.jsx";
 function App() {
   //constants
   const currentCity = "Brisbane";
-  const cities = ["Sydney", "Melbourne", "Perth", "Adelaide"];
   const currentDay = 1;
   const forecastDay = 5;
 
@@ -39,9 +39,25 @@ function App() {
       }
     };
 
+    //add
+    const getRandomCities = () => {
+      const shuffled = cities.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 4);
+    };
+
+    const updateCitiesWeather = () => {
+      const selectedCities = getRandomCities();
+      fetchAllCitiesWeather(selectedCities);
+    };
+
     fetchWeather(currentCity, currentDay).then(setCurrentCityWeather);
     fetchWeather(currentCity, forecastDay).then(setCurrentCityFuture);
-    fetchAllCitiesWeather();
+
+    //add
+    updateCitiesWeather();
+
+    const intervalId = setInterval(updateCitiesWeather, 4000);
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, [currentCity, currentDay, forecastDay]);
 
   const handleSearch = async (city) => {
