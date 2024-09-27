@@ -2,13 +2,8 @@ import React, { Fragment } from "react";
 import "../css/CityCards.css";
 
 function CityCards({ citiesWeather }) {
-  // filter effective city name
-  const validCitiesWeather = citiesWeather.filter(
-    (city) => city && city.current && city.current.condition
-  );
-
   // always keep show 4 cities
-  const displayedCitiesWeather = validCitiesWeather.slice(0, 4);
+  const displayedCitiesWeather = citiesWeather.slice(0, 4);
 
   return (
     <div className="city">

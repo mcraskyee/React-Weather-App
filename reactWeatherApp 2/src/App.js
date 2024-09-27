@@ -14,6 +14,7 @@ function App() {
   const currentCity = "Brisbane";
   const currentDay = 1;
   const forecastDay = 5;
+  const intervalTime = 4000;
 
   //states
   //WeatherDetails, WeatherInfo
@@ -37,7 +38,26 @@ function App() {
         const validWeatherData = weatherData.filter(
           (data) => data && data.current && data.current.condition
         );
-        setCitiesWeather(validWeatherData);
+        // 如果有效数据少于4个，从剩余的城市中继续获取数据，直到有4个有效数据
+        while (validWeatherData.length < 4) {
+          const remainingCities = cities.filter(
+            (city) => !selectedCities.includes(city)
+          );
+          const additionalCity =
+            remainingCities[Math.floor(Math.random() * remainingCities.length)];
+          const additionalWeatherData = await fetchWeather(
+            additionalCity,
+            currentDay
+          );
+          if (
+            additionalWeatherData &&
+            additionalWeatherData.current &&
+            additionalWeatherData.current.condition
+          ) {
+            validWeatherData.push(additionalWeatherData);
+          }
+        }
+        setCitiesWeather(validWeatherData.slice(0, 4));
       } catch (error) {
         console.error("Error fetching cities weather data", error);
       }
@@ -66,7 +86,7 @@ function App() {
   // 使用 useEffect 更新城市天气数据
   useEffect(() => {
     updateCitiesWeather(); // 立即更新一次城市天气数据
-    const intervalId = setInterval(updateCitiesWeather, 4000); // 每4秒钟更新一次城市天气数据
+    const intervalId = setInterval(updateCitiesWeather, intervalTime); // 每4秒钟更新一次城市天气数据
     return () => clearInterval(intervalId); // 在组件卸载时清除定时器
   }, [updateCitiesWeather]);
 
