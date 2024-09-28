@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import "../css/CityCards.css";
 
-function CityCards({ citiesWeather }) {
+function CityCards({ citiesWeather, onCityClick }) {
   // always keep show 4 cities
   const displayedCitiesWeather = citiesWeather.slice(0, 4);
 
@@ -11,7 +11,11 @@ function CityCards({ citiesWeather }) {
       displayedCitiesWeather.length > 0 ? (
         <Fragment>
           {displayedCitiesWeather.map((city, index) => (
-            <div className="city-item" key={index}>
+            <div
+              className="city-item"
+              key={index}
+              onClick={() => onCityClick(city.location.name)}
+            >
               <img
                 className="city-item-icon"
                 src={city.current.condition.icon}

@@ -65,25 +65,25 @@ function App() {
     [currentDay]
   );
 
-  // 定义 getRandomCities 函数
+  // get 4 cities randomly and shuffle
   const getRandomCities = useCallback(() => {
     const shuffled = cities.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 4);
   }, []);
 
-  // 定义 updateCitiesWeather 函数
+  // update Cities Weather data
   const updateCitiesWeather = useCallback(() => {
     const selectedCities = getRandomCities();
     fetchAllCitiesWeather(selectedCities);
   }, [fetchAllCitiesWeather, getRandomCities]);
 
-  // 使用 useEffect 获取当前城市的天气数据
+  // get current city data
   useEffect(() => {
     fetchWeather(currentCity, currentDay).then(setCurrentCityWeather);
     fetchWeather(currentCity, forecastDay).then(setCurrentCityFuture);
   }, [currentCity, currentDay, forecastDay]);
 
-  // 使用 useEffect 更新城市天气数据
+  // update current city data
   useEffect(() => {
     updateCitiesWeather(); // 立即更新一次城市天气数据
     const intervalId = setInterval(updateCitiesWeather, intervalTime); // 每4秒钟更新一次城市天气数据
@@ -108,6 +108,22 @@ function App() {
     }
   };
 
+  //🚩🚩🚩click random city
+  const handleCityClick = async (city) => {
+    try {
+      const weatherData = await fetchWeather(city, currentDay);
+      const forecastData = await fetchWeather(city, forecastDay);
+      if (weatherData && forecastData) {
+        setCurrentCityWeather(weatherData);
+        setCurrentCityFuture(forecastData);
+      } else {
+        console.error("No data found for the selected city");
+      }
+    } catch (error) {
+      console.error("Error fetching data for the selected city", error);
+    }
+  };
+
   return (
     <main className="App">
       <section className="app-left">
@@ -125,7 +141,10 @@ function App() {
           setSearchInput={setSearchInput}
           isInputValid={isInputValid}
         />
-        <CityCards citiesWeather={citiesWeather} />
+        <CityCards
+          citiesWeather={citiesWeather}
+          onCityClick={handleCityClick}
+        />
       </section>
     </main>
   );
