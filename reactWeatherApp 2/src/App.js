@@ -26,6 +26,7 @@ function App() {
   //SearchBar
   const [searchInput, setSearchInput] = useState("");
   const [isInputValid, setIsInputValid] = useState(true);
+  const [intervalId, setIntervalId] = useState(null);
 
   // 定义 fetchAllCitiesWeather 函数
   const fetchAllCitiesWeather = useCallback(
@@ -86,9 +87,26 @@ function App() {
   // update current city data
   useEffect(() => {
     updateCitiesWeather(); // 立即更新一次城市天气数据
-    const intervalId = setInterval(updateCitiesWeather, intervalTime); // 每4秒钟更新一次城市天气数据
-    return () => clearInterval(intervalId); // 在组件卸载时清除定时器
+    const id = setInterval(updateCitiesWeather, intervalTime); // 每4秒钟更新一次城市天气数据
+    setIntervalId(id);
+    return () => clearInterval(id); // 在组件卸载时清除定时器
   }, [updateCitiesWeather]);
+
+  //click random city
+  const handleCityClick = async (city) => {
+    try {
+      const weatherData = await fetchWeather(city, currentDay);
+      const forecastData = await fetchWeather(city, forecastDay);
+      if (weatherData && forecastData) {
+        setCurrentCityWeather(weatherData);
+        setCurrentCityFuture(forecastData);
+      } else {
+        console.error("No data found for the selected city");
+      }
+    } catch (error) {
+      console.error("Error fetching data for the selected city", error);
+    }
+  };
 
   // 定义 handleSearch 函数
   const handleSearch = async (city) => {
@@ -108,22 +126,25 @@ function App() {
     }
   };
 
-  //🚩🚩🚩click random city
-  const handleCityClick = async (city) => {
-    try {
-      const weatherData = await fetchWeather(city, currentDay);
-      const forecastData = await fetchWeather(city, forecastDay);
-      if (weatherData && forecastData) {
-        setCurrentCityWeather(weatherData);
-        setCurrentCityFuture(forecastData);
-      } else {
-        console.error("No data found for the selected city");
-      }
-    } catch (error) {
-      console.error("Error fetching data for the selected city", error);
+  const handleSearchInputChange = (input) => {
+    setSearchInput(input);
+    if (intervalId) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+    }
+    const filteredCities = cities.filter((city) =>
+      city.toLowerCase().startsWith(input.toLowerCase())
+    );
+    if (filteredCities.length > 0) {
+      fetchAllCitiesWeather(filteredCities.slice(0, 4));
+    } else {
+      setCitiesWeather([]);
+    }
+    if (input === "") {
+      const id = setInterval(updateCitiesWeather, intervalTime);
+      setIntervalId(id);
     }
   };
-
   return (
     <main className="App">
       <section className="app-left">
@@ -140,6 +161,7 @@ function App() {
           searchInput={searchInput}
           setSearchInput={setSearchInput}
           isInputValid={isInputValid}
+          onInputChange={handleSearchInputChange}
         />
         <CityCards
           citiesWeather={citiesWeather}

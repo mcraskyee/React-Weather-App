@@ -1,9 +1,20 @@
 import { React } from "react";
 import "../css/SearchBar.css";
 
-function SearchBar({ onSearch, searchInput, setSearchInput, isInputValid }) {
-  const handleSubmit = (e) => {
-    e.preventDefault();
+function SearchBar({
+  onSearch,
+  searchInput,
+  setSearchInput,
+  isInputValid,
+  onInputChange,
+}) {
+  const handleInputChange = (e) => {
+    const input = e.target.value;
+    setSearchInput(input);
+    onInputChange(input);
+  };
+
+  const handleSearchClick = () => {
     onSearch(searchInput);
   };
   return (
@@ -13,9 +24,9 @@ function SearchBar({ onSearch, searchInput, setSearchInput, isInputValid }) {
         type="text"
         placeholder="Please input a city"
         value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
+        onChange={handleInputChange}
       />
-      <button className="search-button" onClick={handleSubmit}>
+      <button className="search-button" onClick={handleSearchClick}>
         Search
       </button>
       {isInputValid === "false" && (
