@@ -40,25 +40,26 @@ function App() {
           (data) => data && data.current && data.current.condition
         );
         // 如果有效数据少于4个，从剩余的城市中继续获取数据，直到有4个有效数据
-        while (validWeatherData.length < 4) {
-          const remainingCities = cities.filter(
-            (city) => !selectedCities.includes(city)
-          );
-          const additionalCity =
-            remainingCities[Math.floor(Math.random() * remainingCities.length)];
-          const additionalWeatherData = await fetchWeather(
-            additionalCity,
-            currentDay
-          );
-          if (
-            additionalWeatherData &&
-            additionalWeatherData.current &&
-            additionalWeatherData.current.condition
-          ) {
-            validWeatherData.push(additionalWeatherData);
-          }
-        }
-        setCitiesWeather(validWeatherData.slice(0, 4));
+        // while (validWeatherData.length < 4) {
+        //   const remainingCities = cities.filter(
+        //     (city) => !selectedCities.includes(city)
+        //   );
+        //   const additionalCity =
+        //     remainingCities[Math.floor(Math.random() * remainingCities.length)];
+        //   const additionalWeatherData = await fetchWeather(
+        //     additionalCity,
+        //     currentDay
+        //   );
+        //   if (
+        //     additionalWeatherData &&
+        //     additionalWeatherData.current &&
+        //     additionalWeatherData.current.condition
+        //   ) {
+        //     validWeatherData.push(additionalWeatherData);
+        //   }
+        // }
+        // setCitiesWeather(validWeatherData.slice(0, 4));
+        setCitiesWeather(validWeatherData);
       } catch (error) {
         console.error("Error fetching cities weather data", error);
       }
@@ -84,7 +85,7 @@ function App() {
     fetchWeather(currentCity, forecastDay).then(setCurrentCityFuture);
   }, [currentCity, currentDay, forecastDay]);
 
-  // update current city data
+  // update current city data in every 4 seconds
   useEffect(() => {
     updateCitiesWeather(); // 立即更新一次城市天气数据
     const id = setInterval(updateCitiesWeather, intervalTime); // 每4秒钟更新一次城市天气数据
@@ -132,15 +133,21 @@ function App() {
       clearInterval(intervalId);
       setIntervalId(null);
     }
-    const filteredCities = cities.filter((city) =>
-      city.toLowerCase().startsWith(input.toLowerCase())
-    );
+    const filteredCities = cities
+      .filter((city) =>
+        // 🌹🌹
+        city.toLowerCase().startsWith(input.toLowerCase())
+      )
+      .sort();
     if (filteredCities.length > 0) {
-      fetchAllCitiesWeather(filteredCities.slice(0, 4));
+      //🌹🌹
+      fetchAllCitiesWeather(filteredCities);
     } else {
       setCitiesWeather([]);
     }
     if (input === "") {
+      updateCitiesWeather();
+      getRandomCities();
       const id = setInterval(updateCitiesWeather, intervalTime);
       setIntervalId(id);
     }
