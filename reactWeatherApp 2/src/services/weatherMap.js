@@ -1,5 +1,6 @@
 const weatherIconMap = {
   Clear: "sunny.png",
+  Sunny: "sunny.png",
   "Partly cloudy": "cloudy_day.png",
   Cloudy: "cloudy_day.png",
   Overcast: "cloudy.png",
@@ -51,7 +52,7 @@ const weatherIconMap = {
 };
 
 const getWeatherIcon = (condition) => {
-  return weatherIconMap[condition] || "default_icon.png";
+  return weatherIconMap[condition] || null;
 };
 
 export { weatherIconMap, getWeatherIcon };
