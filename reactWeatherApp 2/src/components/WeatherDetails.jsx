@@ -1,10 +1,12 @@
 import React, { Fragment } from "react";
 import "../css/WeatherDetails.css";
+//🌹🌹
+import { getWeatherIcon } from "../services/weatherMap.js";
 
 function WeatherDetails({ currentCityWeather }) {
   return (
     <div className="details">
-      {currentCityWeather ? (
+      {currentCityWeather && currentCityWeather.current ? (
         <Fragment>
           <p className="details-state-country">{`${currentCityWeather.location.region}, ${currentCityWeather.location.country}`}</p>
           <h3 className="details-city">{currentCityWeather.location.name}</h3>
@@ -13,7 +15,9 @@ function WeatherDetails({ currentCityWeather }) {
           <div>
             <img
               className="details-icon"
-              src={currentCityWeather.current.condition.icon}
+              src={`photos/${getWeatherIcon(
+                currentCityWeather.current.condition.text
+              )}`}
               alt="icon"
             />
           </div>
