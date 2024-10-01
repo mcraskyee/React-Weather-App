@@ -4,12 +4,14 @@
   height: 5vh;
   margin-right: 1vw;
   border: none;
+  border-radius: 15px;
   border-collapse: 5px;
 }
 
 .search-button {
   height: 5vh;
   width: 5vw;
+  border-radius: 15px;
   background-color: rgb(100, 100, 225);
   color: white;
   border: none;
